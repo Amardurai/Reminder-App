@@ -43,7 +43,6 @@ fun ReminderListTopAppBar(modifier: Modifier = Modifier) {
     )
 }
 
-@Preview
 @Composable
 private fun PreviewReminderListScreen() {
     ReminderListScreen()
