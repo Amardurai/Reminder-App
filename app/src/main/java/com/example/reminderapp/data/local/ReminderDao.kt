@@ -6,23 +6,22 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.example.reminderapp.domain.model.Reminder
+import com.example.reminderapp.domain.model.MeetingReminder
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ReminderDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertReminder(reminder: Reminder)
+    suspend fun insertReminder(meetingReminder: MeetingReminder)
 
     @Delete
-    suspend fun deleteReminder(reminder: Reminder)
+    suspend fun deleteReminder(meetingReminder: MeetingReminder)
 
     @Update
-    suspend fun updateReminder(reminder: Reminder)
+    suspend fun updateReminder(meetingReminder: MeetingReminder)
 
-    @Query("SELECT * FROM reminder ORDER BY timeInMillis DESC")
-    fun getReminders(): Flow<List<Reminder>>
-
+    @Query("SELECT * FROM MeetingReminder ORDER BY timeInMillis DESC")
+    fun getReminders(): Flow<List<MeetingReminder>>
 
 }

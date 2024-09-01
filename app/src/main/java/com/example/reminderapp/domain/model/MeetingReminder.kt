@@ -4,11 +4,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class Reminder(
-    val name: String,
-    val dosage: String,
+data class MeetingReminder(
+    val title: String,
     @PrimaryKey(autoGenerate = true)
     val timeInMillis: Long,
-    val isTaken: Boolean = false,
-    val isRepeating: Boolean = false,
+    val description: String,
+    val isCompleted: Boolean,
+    val isRepeating: Boolean,
 )

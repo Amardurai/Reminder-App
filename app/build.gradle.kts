@@ -70,6 +70,10 @@ dependencies {
     implementation(libs.dagger.hilt)
     ksp(libs.dagger.hilt.compiler)
 
+    //Networking
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson.convertor)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
