@@ -14,13 +14,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun ReminderListScreen() {
+fun ReminderListScreen(
+    uiState: ReminderUiState
+) {
     val isTimePickerVisible = remember {
         mutableStateOf(false)
     }
+
     Scaffold(
         topBar = { ReminderListTopAppBar() }
     ) { innerPadding ->
@@ -32,7 +34,7 @@ fun ReminderListScreen() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReminderListTopAppBar(modifier: Modifier = Modifier) {
+fun ReminderListTopAppBar() {
     TopAppBar(
         title = { Text(text = "Reminders") },
         actions = {

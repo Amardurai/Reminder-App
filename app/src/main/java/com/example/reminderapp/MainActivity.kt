@@ -12,7 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.reminderapp.presentatation.ReminderListScreen
+import com.example.reminderapp.presentatation.ReminderMeetingViewModel
 import com.example.reminderapp.ui.theme.ReminderAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,9 +25,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             ReminderAppTheme {
                 Surface(Modifier.fillMaxSize()) {
-                    ReminderListScreen()
+                    val viewModel = hiltViewModel<ReminderMeetingViewModel>()
+                    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+                    ReminderListScreen(
+                        uiState = uiState.value,
+                    )
                 }
-
             }
         }
     }

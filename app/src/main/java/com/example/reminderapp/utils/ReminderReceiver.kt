@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.MediaPlayer
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -24,10 +25,12 @@ class ReminderReceiver : BroadcastReceiver() {
     @Inject
     lateinit var updateReminderUseCase: UpdateReminderUseCase
 
+    private lateinit var mediaPlayer:MediaPlayer
+
     override fun onReceive(context: Context, intent: Intent) {
         val reminderJson = intent.getStringExtra(AlarmUtils.REMINDER)
         val reminder = Gson().fromJson(reminderJson, MeetingReminder::class.java)
-
+        mediaPlayer = MediaPlayer.create(context, R.raw.alarm_music)
         val donePendingIntent = createPendingIntent(
             context,
             reminderJson,
@@ -44,6 +47,7 @@ class ReminderReceiver : BroadcastReceiver() {
 
         when (intent.action) {
             Constants.DONE -> {
+                mediaPlayer.stop()
                 runBlocking {
                     updateReminderUseCase.invoke(reminder.copy(isCompleted = true))
                     AlarmUtils.cancelAlarm(context, reminder)
@@ -51,6 +55,7 @@ class ReminderReceiver : BroadcastReceiver() {
             }
 
             Constants.REJECT -> {
+                mediaPlayer.stop()
                 runBlocking {
                     updateReminderUseCase.invoke(reminder.copy(isCompleted = true))
                     AlarmUtils.cancelAlarm(context, reminder)
@@ -77,6 +82,8 @@ class ReminderReceiver : BroadcastReceiver() {
                     .build()
 
                 NotificationManagerCompat.from(context).notify(1, notification)
+                mediaPlayer.release()
+                mediaPlayer.start()
             }
         }
 
