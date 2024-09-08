@@ -17,7 +17,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.reminderapp.presentatation.ReminderListScreen
 import com.example.reminderapp.presentatation.ReminderMeetingViewModel
 import com.example.reminderapp.ui.theme.ReminderAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
