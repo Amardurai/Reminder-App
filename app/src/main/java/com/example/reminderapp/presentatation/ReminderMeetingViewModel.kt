@@ -16,9 +16,9 @@ class ReminderMeetingViewModel @Inject constructor(val useCases: UseCases) : Vie
 
     val uiState = useCases.getAllReminderUseCase.invoke().map {
         ReminderUiState(it)
-    }.stateIn(viewModelScope, started = SharingStarted.WhileSubscribed(500), ReminderUiState())
+    }.stateIn(viewModelScope, started = SharingStarted.WhileSubscribed(5000), ReminderUiState())
 
-    fun addReminder(meetingReminder: MeetingReminder) {
+    private fun addReminder(meetingReminder: MeetingReminder) {
         viewModelScope.launch {
             useCases.insertReminderUseCase.invoke(meetingReminder)
         }
@@ -33,6 +33,14 @@ class ReminderMeetingViewModel @Inject constructor(val useCases: UseCases) : Vie
     fun updateReminder(meetingReminder: MeetingReminder) {
         viewModelScope.launch {
             useCases.updateReminderUseCase.invoke(meetingReminder)
+        }
+    }
+
+    fun reminderListAction(action: Actions) {
+        when (action) {
+            is Actions.AddMeeting -> {
+                addReminder(action.reminder)
+            }
         }
     }
 }

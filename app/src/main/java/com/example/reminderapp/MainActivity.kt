@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                     val viewModel = hiltViewModel<ReminderMeetingViewModel>()
                     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
                     ReminderListScreen(
-                        uiState = uiState.value,
+                        uiState = uiState.value, viewModel::reminderListAction
                     )
                 }
             }

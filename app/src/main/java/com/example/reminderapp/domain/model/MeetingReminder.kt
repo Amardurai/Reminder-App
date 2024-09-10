@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class MeetingReminder(
     val title: String,
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     val timeInMillis: Long,
     val description: String,
     val isCompleted: Boolean,
