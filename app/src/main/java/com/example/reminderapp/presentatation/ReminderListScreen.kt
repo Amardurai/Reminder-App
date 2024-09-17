@@ -6,13 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -23,9 +20,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -34,7 +29,6 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTimePickerState
@@ -51,13 +45,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import com.example.reminderapp.domain.model.MeetingReminder
-import com.example.reminderapp.utils.AlarmUtils
-import kotlinx.coroutines.launch
+import com.example.reminderapp.components.AddMeetingDialog
+import com.example.reminderapp.components.TimePickerDialog
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+/*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -161,9 +154,66 @@ fun ReminderListScreen(
         }
     ) { innerPadding ->
         Surface(modifier = Modifier.padding(innerPadding)) {
+
         }
     }
 }
+*/
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ReminderListScreen(
+    uiState: ReminderUiState,
+    onAction: (Actions) -> Unit
+) {
+    var isTimePickerVisible by remember { mutableStateOf(false) }
+
+    val timePickerState = rememberTimePickerState(is24Hour = true)
+    val dateFormat = remember { SimpleDateFormat("hh:mm a", Locale.getDefault()) }
+    var timeInMilli by remember { mutableLongStateOf(0L) }
+    val showAddMeetingDialog = remember { mutableStateOf(false) }
+    val modelSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    AddMeetingDialog(
+        showAddMeetingDialog = showAddMeetingDialog,
+        modelSheetState = modelSheetState,
+        timeInMilli = timeInMilli,
+        dateFormat = dateFormat,
+        onTimeClick = { isTimePickerVisible = true },
+        onAction = onAction
+    )
+
+    TimePickerDialog(
+        timePickerState = timePickerState,
+        isTimePickerVisible = isTimePickerVisible,
+        onConfirm = { hour, minute ->
+            val calendar = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, hour)
+                set(Calendar.MINUTE, minute)
+            }
+            timeInMilli = calendar.timeInMillis
+            isTimePickerVisible = false
+        },
+        onCancel = {
+            isTimePickerVisible = false
+        }
+    )
+
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text(text = "Reminders") })
+        },
+        floatingActionButton = {
+            FloatingButton(
+                onAddClick = { showAddMeetingDialog.value = true }
+            )
+        }
+    ) { innerPadding ->
+        Surface(modifier = Modifier.padding(innerPadding)) {
+
+        }
+    }
+}
+
 
 @Composable
 fun BottomSheetContent(
